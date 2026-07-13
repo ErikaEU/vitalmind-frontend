@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -24,6 +25,7 @@ type FormValues = z.infer<typeof schema>;
 const COLD_START_HINT_DELAY_MS = 4000;
 
 export function LoginForm({ next }: { next?: string }) {
+  const router = useRouter();
   const [showColdStartHint, setShowColdStartHint] = useState(false);
 
   const form = useForm<FormValues>({
@@ -49,6 +51,12 @@ export function LoginForm({ next }: { next?: string }) {
     const result = await loginAction(values, next);
     if (result?.error) {
       form.setError("root", { message: result.error });
+      return;
+    }
+    if (result?.redirectTo) {
+      // replace (no push) para que /login no quede en el historial tras un login exitoso.
+      router.replace(result.redirectTo);
+      router.refresh();
     }
   }
 
