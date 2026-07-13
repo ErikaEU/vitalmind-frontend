@@ -18,10 +18,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="flex min-h-screen flex-1">
-      <aside className="hidden w-64 shrink-0 flex-col border-r bg-muted/20 p-4 md:flex">
+      <aside className="hidden w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar p-4 text-sidebar-foreground md:flex">
         <div className="mb-6 px-2">
           <p className="text-lg font-semibold tracking-tight">VitalMind</p>
-          <p className="text-xs text-muted-foreground">FISI UNMSM</p>
+          <p className="text-xs text-sidebar-foreground/60">FISI UNMSM</p>
         </div>
         <SidebarNav />
       </aside>

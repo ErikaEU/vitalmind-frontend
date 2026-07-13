@@ -21,7 +21,7 @@ export function ActivarTamizajeButton({ idTamizaje }: { idTamizaje: number }) {
   }
 
   return (
-    <Button size="sm" onClick={handleClick} disabled={isPending}>
+    <Button variant="success" size="sm" onClick={handleClick} disabled={isPending}>
       {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
       Activar tamizaje
     </Button>
