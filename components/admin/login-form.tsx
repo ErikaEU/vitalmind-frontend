@@ -97,6 +97,15 @@ export function LoginForm({ next }: { next?: string }) {
         Iniciar sesión
       </Button>
 
+      {/*
+        Puramente visual — el backend no soporta registro todavía.
+        type="button" (no "submit") para que no dispare el envío del
+        formulario; sin onClick, sin acción de ningún tipo al hacer clic.
+      */}
+      <Button type="button" variant="outline" className="w-full">
+        Crear cuenta
+      </Button>
+
       {showColdStartHint && (
         <p className="text-center text-sm text-muted-foreground">
           Esto puede tardar hasta un minuto si el servidor estaba inactivo. Por favor espera...
