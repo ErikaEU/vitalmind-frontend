@@ -23,7 +23,7 @@ export type NivelRiesgo = "critico" | "monitoreo" | "normal";
 
 export type EstadoCita = "programada" | "completada" | "cancelada" | "no_asistio";
 
-export type TipoRespuesta = "opcion_unica" | "texto_libre";
+export type TipoRespuesta = "dicotomica" | "tricotomica";
 
 // ---------------------------------------------------------------------------
 // auth.py

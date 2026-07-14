@@ -13,9 +13,20 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
-import type { RespuestaEnvioRequest, SesionInicioRead } from "@/lib/types";
+import type { PreguntaResumenRead, RespuestaEnvioRequest, SesionInicioRead } from "@/lib/types";
 
 const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+
+/**
+ * El instrumento solo tiene dos tipos y ambos son de opción múltiple
+ * (dicotómica = 2 opciones, tricotómica = 3) — no existe un tipo de
+ * texto libre en el dominio real. El Textarea de abajo queda como
+ * fallback defensivo por si a futuro se agrega un tipo nuevo sin
+ * actualizar el frontend.
+ */
+function esOpcionMultiple(pregunta: PreguntaResumenRead) {
+  return pregunta.tipo_respuesta === "dicotomica" || pregunta.tipo_respuesta === "tricotomica";
+}
 
 function buildSchema(sesion: SesionInicioRead) {
   const shape: Record<string, z.ZodTypeAny> = {};
@@ -50,7 +61,7 @@ export function CuestionarioForm({ sesion }: CuestionarioFormProps) {
   async function onSubmit(values: FormValues) {
     const respuestas: RespuestaEnvioRequest["respuestas"] = sesion.preguntas.map((pregunta) => {
       const raw = values[`q_${pregunta.id_pregunta}` as keyof FormValues] as string;
-      if (pregunta.tipo_respuesta === "opcion_unica") {
+      if (esOpcionMultiple(pregunta)) {
         return { id_pregunta: pregunta.id_pregunta, id_opcion_seleccionada: Number(raw) };
       }
       return { id_pregunta: pregunta.id_pregunta, valor_texto: raw };
@@ -114,7 +125,7 @@ export function CuestionarioForm({ sesion }: CuestionarioFormProps) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {pregunta.tipo_respuesta === "opcion_unica" ? (
+              {esOpcionMultiple(pregunta) ? (
                 <RadioGroup
                   value={form.watch(fieldName) as string}
                   onValueChange={(value) =>
